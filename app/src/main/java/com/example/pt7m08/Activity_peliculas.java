@@ -65,7 +65,6 @@ public class Activity_peliculas extends AppCompatActivity implements View.OnClic
             titulo.setText("");
             pelicula = pelicula.replace(" ", "%20");
             String URL = "https://www.omdbapi.com/?t=" + pelicula + "&apikey=" + apiKey;
-            System.out.println(URL);
             loadData(URL);
         }
 
@@ -137,8 +136,7 @@ public class Activity_peliculas extends AppCompatActivity implements View.OnClic
 
 
                 } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
+                    Toast.makeText(Activity_peliculas.this, "La película no se encuentra", Toast.LENGTH_LONG).show();                }
             }
         },
                 new Response.ErrorListener() {
