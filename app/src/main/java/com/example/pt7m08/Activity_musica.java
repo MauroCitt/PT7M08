@@ -10,6 +10,8 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -33,23 +35,36 @@ public class Activity_musica extends AppCompatActivity {
     public List<Artista> getElements(){ return artistas; }
     String URLMusica;
 
+    Button cargar;
+    String artista;
+    EditText inputArtista;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_musica);
 
+        inputArtista = findViewById(R.id.inputArtista);
+        cargar = findViewById(R.id.btnBuscarArtista);
+        System.out.println(inputArtista);
+
+        RecyclerViewApp adapter = new RecyclerViewApp(artistas);
+        RecyclerView listaAlbumes = findViewById(R.id.listaRecycler);
+        listaAlbumes.setAdapter(adapter);
         findViewById(R.id.btnBuscarArtista).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (hayConexion()){
-                    loadData()
+                    String nom = inputArtista.getText().toString().toLowerCase();
+                    String nombreArtista = nom.replace(" ", "%20");
+
+                    URLMusica = "https://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist=" + nombreArtista + "&api_key=8a263c45ed98a92790c525a6ee0d5c76&format=json";
+                    loadData(listaAlbumes, URLMusica);
                 }
             }
-        })
+        });
 
-        URLMusica = "http://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist=bon%20jovi&api_key=8a263c45ed98a92790c525a6ee0d5c76&format=json";
     }
-
     private boolean hayConexion() {
         boolean resultat = false;
 
@@ -73,11 +88,10 @@ public class Activity_musica extends AppCompatActivity {
                 resultat = false;
             }
         }
-
         return resultat;
     }
 
-    private void loadData(RecyclerView viewLlista, String url) {
+    private void loadData(RecyclerView listaAlbumes, String url) {
         if ( queue == null )
             queue = Volley.newRequestQueue(this);
         JsonObjectRequest request = new JsonObjectRequest(url,
@@ -85,19 +99,19 @@ public class Activity_musica extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            // S'esborra la llista
                             artistas.clear();
-                            // Obtenim l'array que té per nom data
                             JSONArray jsonArray = response.getJSONObject("topalbums").getJSONArray("album");
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 Artista artista = new Artista(
-                                        jsonArray.getJSONObject(i).getString("name"),
                                         jsonArray.getJSONObject(i).getJSONObject("artist").getString("name"),
+                                        jsonArray.getJSONObject(i).getString("name"),
                                         jsonArray.getJSONObject(i).getJSONArray("image").getJSONObject(2).getString("#text")
                                 );
                                 artistas.add(artista);
+                                System.out.println(artista.getNombreAlbum());
                             }
-                            viewLlista.getAdapter().notifyDataSetChanged();
+                            listaAlbumes.getAdapter().notifyDataSetChanged();
+                            System.out.println("Number of items in artistas: " + artistas.size());
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -106,11 +120,10 @@ public class Activity_musica extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
                         Toast.makeText(Activity_musica.this, "Error en obtenir dades", Toast.LENGTH_SHORT).show();
                     }
                 });
         queue.add(request);
     }
-
-
 }

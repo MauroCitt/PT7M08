@@ -16,7 +16,7 @@
         android:theme="@style/Theme.PT7M08"
         tools:targetApi="31">
         <activity
-            android:name=".Activity_artista"
+            android:name=".Activity_album"
             android:exported="false" />
         <activity
             android:name=".Activity_musica"

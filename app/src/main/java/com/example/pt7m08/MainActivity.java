@@ -21,10 +21,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         peliculas.setOnClickListener(this);
         musica = findViewById(R.id.musica);
         musica.setOnClickListener(this);
-
-
-
-
     }
 
     @Override
@@ -32,8 +28,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (v.getId() == peliculas.getId()) {
             Intent intent = new Intent(this, Activity_peliculas.class);
             startActivity(intent);
-        } else {
-            Intent intent = new Intent(this, Activity_peliculas.class);
+        } else if(v.getId() == musica.getId()) {
+            Intent intent = new Intent(this, Activity_musica.class);
             startActivity(intent);
         }
     }

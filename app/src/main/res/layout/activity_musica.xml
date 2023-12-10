@@ -7,18 +7,19 @@
     tools:context=".Activity_musica">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="412dp"
-        android:layout_height="575dp"
+        android:id="@+id/listaRecycler"
+        android:layout_width="389dp"
+        android:layout_height="554dp"
+        android:layout_marginTop="10dp"
+        app:layoutManager="LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/btnBuscarArtista"
+        app:layout_constraintVertical_bias="0.368" />
 
     <EditText
-        android:id="@+id/editTextText"
+        android:id="@+id/inputArtista"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
